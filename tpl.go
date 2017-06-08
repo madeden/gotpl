@@ -7,7 +7,8 @@ import (
 	"log"
 	"os"
 	"text/template"
-
+	"path/filepath"
+	"github.com/Masterminds/sprig"
 	"gopkg.in/yaml.v2"
 )
 
@@ -15,7 +16,7 @@ import (
 // for the tpl_files templates and writes the executed templates to
 // the out stream.
 func ExecuteTemplates(values_in io.Reader, out io.Writer, tpl_files ...string) error {
-	tpl, err := template.ParseFiles(tpl_files...)
+	tpl, err := template.New(filepath.Base(tpl_files[0])).Funcs(sprig.TxtFuncMap()).ParseFiles(tpl_files...)
 	if err != nil {
 		return fmt.Errorf("Error parsing template(s): %v", err)
 	}
